@@ -29,20 +29,20 @@
 \def\label@cauthor{姓\hphantom{汉字}名：}
 \def\label@studentid{学\hphantom{汉字}号：}
 \def\label@school{院\hphantom{汉字}系：}
-\def\label@cmajor{专\hphantom{汉字}业：}
+\def\label@cmajor{本科专业：}
 \def\label@direction{研究方向：}
-\def\label@cmentor{导\hphantom{汉字}师：}
+\def\label@cmentor{指导导师：}
 \def\label@ementor{Directed by\ }
 \def\label@ckeywords{关键词：}
-\def\label@ekeywords{KEYWORDS:\ }
+\def\label@ekeywords{Key Words:\ }
 
 \def\titlepagename{封面}
 \def\cuniversity{北京大学}
 \def\euniversity{Peking University}
-\def\cthesisname{博士研究生学位论文}
-\def\ethesisname{Doctor Thesis}
+\def\cthesisname{本科生毕业论文}
+\def\ethesisname{Undergraduate Thesis}
 \def\cabstractname{摘要}
-\def\eabstractname{ABSTRACT}
+\def\eabstractname{Abstract}
 
 \endinput
 % vim:ft=tex:ts=2:sw=2
