@@ -175,6 +175,8 @@
 		% Add PDF bookmark for table of contents.
 		\let\pkuthss@tmp@tableofcontents\tableofcontents
 		\renewcommand{\tableofcontents}{%
+        	\hypersetup{linkcolor=black}
+            % \hypersetup{hidelinks}
 			\pkuthss@int@pdfmark{\contentsname}{contents}
 			\pkuthss@tmp@tableofcontents%
 		}
@@ -287,12 +289,14 @@
 	\fancypagestyle{plain}{
 		\fancyhf{}\renewcommand*{\headrulewidth}{0.75bp}
 		\fancyfoot[C]{\zihao{5}\normalfont{\thepage}}
-		\if@twoside
-			\fancyhead[CE]{\zihao{5}\normalfont{\cuniversity\cthesisname}}
-			\fancyhead[CO]{\zihao{5}\normalfont\pkuthss@int@setcase{\leftmark}}
-		\else
-			\fancyhead[C]{\zihao{5}\normalfont\pkuthss@int@setcase{\leftmark}}
-		\fi
+% 		\if@twoside
+% 			\fancyhead[CE]{\zihao{5}\normalfont{\cuniversity\cthesisname}}
+% 			\fancyhead[CO]{\zihao{5}\normalfont\pkuthss@int@setcase{\leftmark}}
+% 		\else
+% 			\fancyhead[C]{\zihao{5}\normalfont\pkuthss@int@setcase{\leftmark}}
+% 		\fi
+		\fancyhead[C]
+        {\zihao{5}\normalfont{\cuniversity\cthesisname \hfill \leftmark}}
 	}
 	\pagestyle{plain}
 }
@@ -320,6 +324,11 @@
 % because the bookmark will point to somewhere below the chapter mark.
 \def\pkuthss@int@pdfmark#1#2{%
 	\if@openright\cleardoublepage\else\clearpage\fi
+	\pdfbookmark[0]{#1}{#2}%
+}
+
+% remove cleardouble page option
+\def\pkuthss@int@pdfplain#1#2{%
 	\pdfbookmark[0]{#1}{#2}%
 }
 
@@ -362,7 +371,11 @@
 			% Title of the thesis.
 			{%
 				\zihao{2}{\label@ctitle}%
-				\pkuthss@int@fillinblank{2}{0.64\textwidth}{\textbf{\@ctitle}}%
+				\pkuthss@int@fillinblank{4}{0.64\textwidth}{
+                \textbf{\@ctitle}
+                \\ % english title with a new line (EECS)
+                \textbf{\zihao{3} \@etitle}
+                }%
 			}
 			\vfill
 			% Information about the author.
@@ -379,8 +392,8 @@
 					\pkuthss@int@fillinblank{1}{\pkuthss@tmp@len}{\fangsong\@school}		\\
 					{\bfseries\label@cmajor}		&
 					\pkuthss@int@fillinblank{1}{\pkuthss@tmp@len}{\fangsong\@cmajor}		\\
-					{\bfseries\label@direction}	&
-					\pkuthss@int@fillinblank{1}{\pkuthss@tmp@len}{\fangsong\@direction}	\\
+% 					{\bfseries\label@direction}	&
+% 					\pkuthss@int@fillinblank{1}{\pkuthss@tmp@len}{\fangsong\@direction}	\\
 					{\bfseries\label@cmentor}		&
 					\pkuthss@int@fillinblank{1}{\pkuthss@tmp@len}{\fangsong\@cmentor}		\\
 				\end{tabular}%
@@ -392,28 +405,56 @@
 	\end{titlepage}%
 }
 
-% Typeset the Chinese abstract.
-\newenvironment{cabstract}{%
-	\pkuthss@int@pdfmark{\cabstractname}{cabstract}
-	\chapter*{\cabstractname}
-	\markboth{\cabstractname}{}%
-}{% Keywords at the bottom of the page.
-	\vfill\noindent\textbf{\label@ckeywords}{\@ckeywords}%
+% add a plain chapter
+\newcommand{\MyChapter}{%
+    \let\cleardoublepage\empty
+    \clearpage
+    \chapter
 }
 
-% Typeset the English abstract.
+% % Typeset the Chinese abstract.
+% \newenvironment{cabstract}{%
+% 	\pkuthss@int@pdfmark{\cabstractname}{cabstract}
+% 	\chapter*{\cabstractname}
+% 	\markboth{\cabstractname}{}%
+% }{% Keywords at the bottom of the page.
+% 	\vfill\noindent\textbf{\label@ckeywords}{\@ckeywords}%
+% }
+
+% Typeset the Chinese abstract. (EECS)
+\newenvironment{cabstract}{%
+	\pkuthss@int@pdfplain{\cabstractname}{cabstract}
+	\MyChapter*{\cabstractname}
+	\markboth{\cabstractname}{}%
+}{% Keywords at the bottom of the content.
+	\newline \newline
+    \noindent\textbf{\label@ckeywords}{\@ckeywords}%
+}
+
+% % Typeset the English abstract.
+% \newenvironment{eabstract}{%
+% 	\pkuthss@int@pdfmark{\eabstractname}{eabstract}
+% 	\chapter*{\sffamily\@etitle}
+% 	\markboth{\eabstractname}{}
+% 	\begin{center}
+% 		{\@eauthor} ({\@emajor})\\
+% 		{\label@ementor}{\@ementor}\\[2em]
+% 		\textbf{\sffamily\eabstractname}
+% 	\end{center}
+% 	\par%
+% }{% Keywords at the bottom of the page.
+% 	\vfill\noindent\textbf{\label@ekeywords}{\@ekeywords}%
+% }
+
+% Typeset the English abstract.(EECS)
 \newenvironment{eabstract}{%
-	\pkuthss@int@pdfmark{\eabstractname}{eabstract}
-	\chapter*{\sffamily\@etitle}
+	\pkuthss@int@pdfplain{\eabstractname}{eabstract}
+	\MyChapter*{\eabstractname}
 	\markboth{\eabstractname}{}
-	\begin{center}
-		{\@eauthor} ({\@emajor})\\
-		{\label@ementor}{\@ementor}\\[2em]
-		\textbf{\sffamily\eabstractname}
-	\end{center}
-	\par%
-}{% Keywords at the bottom of the page.
-	\vfill\noindent\textbf{\label@ekeywords}{\@ekeywords}%
+    \zihao{5}
+}{% Keywords at the bottom of the content.
+	\newline \newline
+    \noindent\textbf{\label@ekeywords}{\@ekeywords}%
 }
 
 \endinput
